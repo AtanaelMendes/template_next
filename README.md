@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## TECNOLOGIES
 
-## Getting Started
+- ⚛ next.js/react
+- axios.js
+- javascript
 
-First, run the development server:
+## CONFIGURANDO AMBIENTE
+-   Clone o repositório saas que contém somente o front
+-   na raiz do saas rode ``npm install``
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## SUBINDO AMBIENTE
+-   criar um arquivo .env.local, copiar os dados do .env.pdct para o .env.local e atualizar os endpoints para o seu local
+-   na raiz do saas rode ``npm run dev``
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## BUILDANDO PARA HOMOLOG
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- ``npm run build:homolog``
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## BUILDANDO PARA PRODUÇÃO
 
-## Learn More
+- ``npm run build:prod``
 
-To learn more about Next.js, take a look at the following resources:
+## YOU ARE READY TO CREATE BUGS
+-   http://localhost:3000
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## COMMITANDO HOMOLOG / PROD
+-   Antes de commitar suas alterações rode o comando ``npm run build:prod`` e ``npm run build:homolog``
+    -   O ``npm run dev`` deve estar derrubado, se não, não vai compilar. 👍
+-   O comando ``npm run build:homolog`` vai gerar o compilado na pasta (homolog) e ``npm run build:prod`` vai gerar o compilado na pasta (production)
+-   Ao aprovar o merge da homolog ou prod a pipeline irá copiar o conteúdo das pastas pra as pastas saas do servidor
+-   Somente a pasta production e homolog deve subir pro servidor via pipeline
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## TESTAR O COMPILADO LOCAL
+-   No arquivo saas/next.config.mjs altere a linha:
+    -   De ``const basePath = isBuild ? '/saas' : '';``
+    -   Para ``const basePath = isBuild ? '/saas_local' : '';``
+-   Gere o compilado ``npm run build``
+-   Copie o conteúdo da out e cole na saas_local
+-   Acessar http://localhost/saas_local
 
-## Deploy on Vercel
+## WARNING 🚧
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+-    Ao alterar o path do compilado não esqueça de voltar ao original, se não vai quebrar a produção
