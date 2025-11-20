@@ -1,4 +1,4 @@
-import Login from './login';
+import Link from 'next/link';
 
 export default function Index() {
   return (
@@ -11,6 +11,20 @@ export default function Index() {
           <p className="text-xl text-gray-600">
             Sua aplicação Next.js está funcionando!
           </p>
+          <div className="mt-6 flex justify-center space-x-4">
+            <Link 
+              href="/login" 
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-colors"
+            >
+              Ir para Login
+            </Link>
+            <Link 
+              href="/dashboard" 
+              className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition-colors"
+            >
+              Ver Dashboard
+            </Link>
+          </div>
         </header>
         
         <main className="max-w-4xl mx-auto">
@@ -24,27 +38,27 @@ export default function Index() {
               </p>
               <ul className="list-disc list-inside text-gray-600">
                 <li>Componentes em JavaScript</li>
-                <li>Estrutura organizada</li>
-                <li>Sistema de login</li>
-                <li>Design responsivo</li>
+                <li>Sistema de rotas</li>
+                <li>Autenticação simples</li>
+                <li>Dashboard funcional</li>
               </ul>
             </div>
             
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Componentes Disponíveis
+                Páginas Disponíveis
               </h2>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="p-3 bg-blue-50 rounded border-l-4 border-blue-500">
-                  <strong className="text-blue-800">Login Component</strong>
+                  <strong className="text-blue-800">Página de Login</strong>
                   <p className="text-blue-600 text-sm">
-                    Componente de autenticação com formulário
+                    Acesse em <code className="bg-blue-100 px-1 rounded">/login</code>
                   </p>
                 </div>
                 <div className="p-3 bg-green-50 rounded border-l-4 border-green-500">
-                  <strong className="text-green-800">Index Component</strong>
+                  <strong className="text-green-800">Dashboard</strong>
                   <p className="text-green-600 text-sm">
-                    Página principal da aplicação
+                    Acesse em <code className="bg-green-100 px-1 rounded">/dashboard</code>
                   </p>
                 </div>
               </div>
@@ -53,9 +67,16 @@ export default function Index() {
           
           <div className="mt-8 bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
-              Acesso ao Sistema
+              Navegar pelo App
             </h2>
-            <Login />
+            <p className="text-center text-gray-600 mb-4">
+              Clique nos botões acima ou use os links de navegação para explorar as funcionalidades.
+            </p>
+            <div className="text-center text-sm text-gray-500">
+              <p><strong>Credenciais de teste:</strong></p>
+              <p>Email: <code className="bg-gray-100 px-1 rounded">admin@teste.com</code></p>
+              <p>Senha: <code className="bg-gray-100 px-1 rounded">123456</code></p>
+            </div>
           </div>
         </main>
       </div>

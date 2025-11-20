@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/flowbite-react/lib/**/*.js",
-    "./node_modules/react-tailwindcss-select/dist/index.esm.js"
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     container: {
@@ -158,7 +158,4 @@ module.exports = {
   //   'fill-black',
   //   'font-bold',
   // ],
-  plugins: [
-    require('flowbite/plugin')
-  ]
 };
