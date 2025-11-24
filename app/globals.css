@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* Custom Colors */
@@ -120,11 +121,6 @@
   }
 }
 
-/* Background Images */
-.bg-fundo-rhbrasil {
-  background-image: url('/images/logos/rhbrasil/fundo_rhb.jpg');
-}
-
 .bg-loading-gradient {
   background-image: radial-gradient(in oklab, var(--tw-gradient-stops));
 }
@@ -138,11 +134,9 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {

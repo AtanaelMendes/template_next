@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useAppContext } from '@/context/AppContext';
 import Button from '@/components/buttons/Button';
 import ButtonToggle from '@/components/buttons/ButtonToggle';
 import ButtonDropDown from '@/components/buttons/ButtonDropDown';
@@ -63,7 +64,7 @@ const CodeBlock = ({ code }) => {
 
 const Section = ({ title, children }) => (
     <div className="mb-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-6 pb-3 border-b-2 border-primary">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 pb-3 border-b-2 border-primary">
             {title}
         </h2>
         {children}
@@ -71,13 +72,13 @@ const Section = ({ title, children }) => (
 );
 
 const ComponentDemo = ({ title, description, code, children }) => (
-    <div className="mb-8 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+    <div className="mb-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
         <div className="bg-gradient-to-r from-primary to-blue-600 px-6 py-4">
             <h3 className="text-xl font-semibold text-white">{title}</h3>
             {description && <p className="text-blue-100 text-sm mt-1">{description}</p>}
         </div>
         <div className="p-6">
-            <div className="mb-4 p-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 min-h-[100px] flex items-center justify-center">
+            <div className="mb-4 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 min-h-[100px] flex items-center justify-center">
                 <div className="w-full">
                     {children}
                 </div>
@@ -88,6 +89,7 @@ const ComponentDemo = ({ title, description, code, children }) => (
 );
 
 export default function DevPage() {
+    const { darkMode, toggleDarkMode } = useAppContext();
     const [activeSection, setActiveSection] = useState('buttons');
     const [inputValue, setInputValue] = useState('');
     const [emailValue, setEmailValue] = useState('');
@@ -111,39 +113,61 @@ export default function DevPage() {
     ];
 
     return (
-        <div className="flex min-h-screen bg-gray-50">
-            {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-xl fixed h-full overflow-y-auto border-r border-gray-200">
-                <div className="p-6 bg-gradient-to-br from-primary to-blue-700">
-                    <h1 className="text-2xl font-bold text-white">Component Docs</h1>
-                    <p className="text-blue-100 text-sm mt-1">template_next</p>
-                </div>
-
-                <nav className="p-4">
-                    <div className="mb-2 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        Componentes
+        <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+                {/* Sidebar */}
+                <aside className="w-64 bg-white dark:bg-gray-800 shadow-xl fixed h-full overflow-y-auto border-r border-gray-200 dark:border-gray-700">
+                    <div className="p-6 bg-gradient-to-br from-primary to-blue-700">
+                        <h1 className="text-2xl font-bold text-white">Component Docs</h1>
+                        <p className="text-blue-100 text-sm mt-1">template_next</p>
                     </div>
-                    {menuItems.map((item) => (
+
+                    {/* Dark Mode Toggle */}
+                    <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                         <button
-                            key={item.id}
-                            onClick={() => setActiveSection(item.id)}
-                            className={`w-full text-left px-4 py-3 rounded-lg mb-2 transition-all duration-200 flex items-center gap-3 ${activeSection === item.id
-                                ? 'bg-primary text-white shadow-md transform scale-105'
-                                : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
-                                }`}
+                            onClick={() => {
+                                console.log('🔘 Button clicked! Current darkMode:', darkMode);
+                                toggleDarkMode();
+                                console.log('🔘 toggleDarkMode called');
+                            }}
+                            className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                         >
+                            <span className="flex items-center gap-3">
+                                <span className="text-xl">{darkMode ? '🌙' : '☀️'}</span>
+                                <span className="font-medium text-gray-700 dark:text-gray-200">
+                                    {darkMode ? 'Dark Mode' : 'Light Mode'}
+                                </span>
+                            </span>
+                            <div className={`w-12 h-6 rounded-full transition-colors ${darkMode ? 'bg-primary' : 'bg-gray-300'} relative`}>
+                                <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${darkMode ? 'transform translate-x-6' : ''}`}></div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <nav className="p-4">
+                        <div className="mb-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Componentes
+                        </div>
+                        {menuItems.map((item) => (
+                            <button
+                                key={item.id}
+                                onClick={() => setActiveSection(item.id)}
+                                className={`w-full text-left px-4 py-3 rounded-lg mb-2 transition-all duration-200 flex items-center gap-3 ${activeSection === item.id
+                                    ? 'bg-primary text-white shadow-md transform scale-105'
+                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:translate-x-1'
+                                    }`}
+                            >
                             <span className="text-xl">{item.icon}</span>
                             <span className="font-medium">{item.label}</span>
                         </button>
                     ))}
                 </nav>
 
-                <div className="p-4 mt-8 border-t border-gray-200 bg-gray-50">
-                    <p className="text-xs text-gray-600 font-semibold">Template Next v1.0</p>
-                    <p className="text-xs text-gray-500 mt-1">Next.js 16 + React 19</p>
-                    <p className="text-xs text-gray-500">Tailwind CSS v4</p>
-                </div>
-            </aside>
+                    <div className="p-4 mt-8 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                        <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold">Template Next v1.0</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">Next.js 16 + React 19</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500">Tailwind CSS v4</p>
+                    </div>
+                </aside>
 
             {/* Main Content */}
             <main className="ml-64 flex-1 p-8">

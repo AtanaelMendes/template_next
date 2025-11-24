@@ -10,7 +10,7 @@ export const CardActions = ({ children, align }) => {
         left: "text-left"
     }
     return (
-        <div className={"inline-block w-full max-h-14 p-1 xl:p-2 border-t-2 "+position[(align || "left")]}>
+        <div className={"inline-block w-full max-h-14 p-1 xl:p-2 border-t-2 dark:border-gray-700 "+position[(align || "left")]}>
             {children}
         </div>
     );
@@ -32,8 +32,8 @@ export const CardTitle = ({ children, primary, success, warning, danger, color, 
     };
 
     return (
-        <div className={cn(`mb-2 text-lg xl:text-xl font-bold tracking-tight w-full p-1 xl:p-2 border-b-2 relative rounded-t-lg h-fit`, getColor())}>
-            {button && <div className='float-right z-10 rounded-full p-1 hover:bg-drop-shadow-4 cursor-pointer drop-shadow' onClick={handleClick}>
+        <div className={cn(`mb-2 text-lg xl:text-xl font-bold tracking-tight w-full p-1 xl:p-2 border-b-2 dark:border-gray-700 relative rounded-t-lg h-fit`, getColor())}>
+            {button && <div className='float-right z-10 rounded-full p-1 hover:bg-drop-shadow-4 dark:hover:bg-gray-700 cursor-pointer drop-shadow' onClick={handleClick}>
                 <FontAwesomeIcon icon={faEllipsisVertical} width="20" height="20" />
             </div>}
             <span className='drop-shadow'>
@@ -45,7 +45,7 @@ export const CardTitle = ({ children, primary, success, warning, danger, color, 
 
 export const CardBody = ({ children }) => {
     return (
-        <div className="flex flex-col w-full text-gray-700 p-1 xl:p-2">
+        <div className="flex flex-col w-full text-gray-700 dark:text-gray-300 p-1 xl:p-2">
             {children}
         </div>
     );
@@ -86,7 +86,7 @@ export const CardImage = ({ src, alt, height, title, button, onClick }) => {
 
 const Card = ({ children, width, className }) => {
     return (
-        <div className={cn(`flex flex-row flex-wrap bg-white border border-gray-200 rounded-lg shadow`, width || "w-full", className )}>
+        <div className={cn(`flex flex-row flex-wrap bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow`, width || "w-full", className )}>
             {children}
         </div>
     );
