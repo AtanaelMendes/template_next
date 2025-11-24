@@ -1,42 +1,94 @@
-import axios from "axios";
-import Router from 'next/router';
-import { toast } from 'react-toastify';
+// HTTP client using native fetch API - compatible with axios API
+const apiClient = {
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL || ''}/`,
 
-const axiosInstance = axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_API_URL}/`,
-    withCredentials: true,
-    timeout: 30000, // 30 segundos
-});
+  async request(config) {
+    const url = `${this.baseURL.replace(/\/$/, '')}${config.url}`;
+    const startTime = new Date().getTime();
 
-// Interceptor de requisição para marcar o início
-axiosInstance.interceptors.request.use((config) => {
-    config.metadata = { startTime: new Date().getTime() };
-    return config;
-});
+    try {
+      const response = await fetch(url, {
+        method: config.method || 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...config.headers,
+        },
+        body: config.data ? JSON.stringify(config.data) : undefined,
+        credentials: 'include',
+      });
 
-// Interceptor de resposta
-axiosInstance.interceptors.response.use(
-    (response) => {
-        const elapsed = new Date().getTime() - response.config.metadata.startTime;
-        if (elapsed > 10000) {
-            toast.warn('⚠️ O servidor está demorando para responder. Por favor, aguarde.');
+      const elapsed = new Date().getTime() - startTime;
+      
+      let data = null;
+      const contentType = response.headers.get('content-type');
+      
+      try {
+        if (contentType && contentType.includes('application/json')) {
+          data = await response.json();
+        } else {
+          data = await response.text();
         }
-        return response;
-    },
-    (error) => {
-        const startTime = error.config?.metadata?.startTime;
-        if (startTime) {
-            const elapsed = new Date().getTime() - startTime;
-            if (elapsed > 10000) {
-                toast.warn('⚠️ O servidor está demorando para responder. Por favor, aguarde.');
-            }
-        }
+      } catch {
+        data = null;
+      }
 
-        if (error.response && error.response.status === 401) {
-            Router.push('/login');
+      // Log slow requests
+      if (elapsed > 10000) {
+        console.warn('⚠️ O servidor está demorando para responder. Por favor, aguarde.');
+      }
+
+      // Handle successful responses
+      if (response.ok) {
+        return {
+          data,
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers,
+          config,
+        };
+      }
+
+      // Handle error responses
+      if (response.status === 401) {
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
         }
-        return Promise.reject(error);
+      }
+
+      const error = new Error(response.statusText);
+      error.response = {
+        status: response.status,
+        statusText: response.statusText,
+        data,
+        headers: response.headers,
+        config,
+      };
+      error.config = config;
+      throw error;
+    } catch (error) {
+      throw error;
     }
-);
+  },
 
-export { axiosInstance as default, axios };
+  get(url, config = {}) {
+    return this.request({ ...config, method: 'GET', url });
+  },
+
+  post(url, data, config = {}) {
+    return this.request({ ...config, method: 'POST', url, data });
+  },
+
+  put(url, data, config = {}) {
+    return this.request({ ...config, method: 'PUT', url, data });
+  },
+
+  patch(url, data, config = {}) {
+    return this.request({ ...config, method: 'PATCH', url, data });
+  },
+
+  delete(url, config = {}) {
+    return this.request({ ...config, method: 'DELETE', url });
+  },
+};
+
+export default apiClient;
