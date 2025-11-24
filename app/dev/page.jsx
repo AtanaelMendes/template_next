@@ -90,8 +90,8 @@ const Section = ({ title, children }) => (
     </div>
 );
 
-const ComponentDemo = ({ title, description, code, children }) => (
-    <div className="mb-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+const ComponentDemo = ({ title, description, code, children, id }) => (
+    <div id={id} className="mb-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 scroll-mt-24">
         <div className="bg-gradient-to-r from-primary to-blue-600 px-6 py-4">
             <h3 className="text-xl font-semibold text-white">{title}</h3>
             {description && <p className="text-blue-100 text-sm mt-1">{description}</p>}
@@ -135,13 +135,107 @@ export default function DevPage() {
     const [showDialogFields, setShowDialogFields] = useState(false);
     const [showFailure, setShowFailure] = useState(false);
     const [sidebarActive, setSidebarActive] = useState('home');
+    const [expandedSections, setExpandedSections] = useState(['buttons', 'inputs', 'cards', 'layouts']);
 
     const menuItems = [
-        { id: 'buttons', label: 'Botões', icon: '🔘' },
-        { id: 'inputs', label: 'Inputs', icon: '📝' },
-        { id: 'cards', label: 'Cards', icon: '🎴' },
-        { id: 'layouts', label: 'Layouts', icon: '📐' },
+        { 
+            id: 'buttons', 
+            label: 'Botões', 
+            icon: '🔘',
+            items: [
+                { id: 'button-variants', label: 'Variantes de Cores' },
+                { id: 'button-sizes', label: 'Tamanhos' },
+                { id: 'button-shapes', label: 'Formas' },
+                { id: 'button-states', label: 'Estados' },
+                { id: 'button-dropdown', label: 'Dropdown' },
+                { id: 'button-toggle', label: 'Toggle' },
+                { id: 'button-group', label: 'Button Group' },
+                { id: 'button-radio', label: 'Radio Group' },
+                { id: 'button-float', label: 'Float Action' },
+                { id: 'button-float-expandable', label: 'Float Expandable' },
+                { id: 'button-pills', label: 'Pills Badge' },
+                { id: 'button-whatsapp', label: 'WhatsApp' },
+            ]
+        },
+        { 
+            id: 'inputs', 
+            label: 'Inputs', 
+            icon: '📝',
+            items: [
+                { id: 'input-text', label: 'Text' },
+                { id: 'input-email', label: 'Email' },
+                { id: 'input-password', label: 'Password' },
+                { id: 'input-number', label: 'Number' },
+                { id: 'input-date', label: 'Date' },
+                { id: 'input-datepicker', label: 'DatePicker' },
+                { id: 'input-month', label: 'Month' },
+                { id: 'input-cpf', label: 'CPF' },
+                { id: 'input-pis', label: 'PIS' },
+                { id: 'input-nit', label: 'NIT' },
+                { id: 'input-checkbox', label: 'Checkbox' },
+                { id: 'input-radio', label: 'Radio' },
+                { id: 'input-file', label: 'File' },
+                { id: 'input-textarea', label: 'TextArea' },
+            ]
+        },
+        { 
+            id: 'cards', 
+            label: 'Cards', 
+            icon: '🎴',
+            items: [
+                { id: 'card-basic', label: 'Card Básico' },
+                { id: 'card-colors', label: 'Com Cores' },
+                { id: 'card-image', label: 'Com Imagem' },
+            ]
+        },
+        { 
+            id: 'layouts', 
+            label: 'Layouts', 
+            icon: '📐',
+            items: [
+                { id: 'layout-typography', label: 'Typography' },
+                { id: 'layout-accordion', label: 'Accordion' },
+                { id: 'layout-loading', label: 'Loading' },
+                { id: 'layout-nodata', label: 'NoDataFound' },
+                { id: 'layout-pagination', label: 'Pagination' },
+                { id: 'layout-skeleton', label: 'Skeleton' },
+                { id: 'layout-skeleton-form', label: 'FormSkeleton' },
+                { id: 'layout-skeleton-table', label: 'TableSkeleton' },
+                { id: 'layout-skeleton-card', label: 'CardSkeleton' },
+                { id: 'layout-skeleton-list', label: 'ListSkeleton' },
+                { id: 'layout-tooltip', label: 'Tooltip' },
+                { id: 'layout-modal', label: 'ModalGrid' },
+                { id: 'layout-modal-variants', label: 'Modal Variantes' },
+                { id: 'layout-modal-sizes', label: 'Modal Tamanhos' },
+                { id: 'layout-modal-props', label: 'Modal Propriedades' },
+                { id: 'layout-balloon', label: 'Balloon' },
+                { id: 'layout-blockquote', label: 'Blockquote' },
+                { id: 'layout-clipboard', label: 'Clipboard' },
+                { id: 'layout-confirm', label: 'Confirm' },
+                { id: 'layout-dialog', label: 'Dialog' },
+                { id: 'layout-dialogfields', label: 'DialogFields' },
+                { id: 'layout-dataloading', label: 'DataLoading' },
+                { id: 'layout-failure', label: 'Failure' },
+                { id: 'layout-iframe', label: 'Iframe' },
+                { id: 'layout-minisidebar', label: 'MiniSidebar' },
+            ]
+        },
     ];
+
+    const toggleSection = (sectionId) => {
+        setExpandedSections(prev => 
+            prev.includes(sectionId) 
+                ? prev.filter(id => id !== sectionId)
+                : [...prev, sectionId]
+        );
+    };
+
+    const scrollToComponent = (componentId) => {
+        const element = document.getElementById(componentId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
 
     return (
         <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -178,19 +272,56 @@ export default function DevPage() {
                         <div className="mb-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Componentes
                         </div>
-                        {menuItems.map((item) => (
-                            <button
-                                key={item.id}
-                                onClick={() => setActiveSection(item.id)}
-                                className={`w-full text-left px-4 py-3 rounded-lg mb-2 transition-all duration-200 flex items-center gap-3 ${activeSection === item.id
-                                    ? 'bg-primary text-white shadow-md transform scale-105'
-                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:translate-x-1'
+                        {menuItems.map((section) => (
+                            <div key={section.id} className="mb-2">
+                                {/* Section Header */}
+                                <button
+                                    onClick={() => {
+                                        setActiveSection(section.id);
+                                        toggleSection(section.id);
+                                    }}
+                                    className={`w-full text-left px-4 py-2.5 rounded-lg transition-all duration-200 flex items-center justify-between ${
+                                        activeSection === section.id
+                                            ? 'bg-primary text-white shadow-md'
+                                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                                     }`}
-                            >
-                            <span className="text-xl">{item.icon}</span>
-                            <span className="font-medium">{item.label}</span>
-                        </button>
-                    ))}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-xl">{section.icon}</span>
+                                        <span className="font-medium">{section.label}</span>
+                                    </div>
+                                    <svg
+                                        className={`w-4 h-4 transition-transform duration-200 ${
+                                            expandedSections.includes(section.id) ? 'rotate-180' : ''
+                                        }`}
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                {/* Section Items (Tree) */}
+                                {expandedSections.includes(section.id) && (
+                                    <div className="ml-4 mt-1 border-l-2 border-gray-200 dark:border-gray-700 pl-2">
+                                        {section.items.map((item) => (
+                                            <button
+                                                key={item.id}
+                                                onClick={() => {
+                                                    setActiveSection(section.id);
+                                                    scrollToComponent(item.id);
+                                                }}
+                                                className="w-full text-left px-3 py-1.5 rounded text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 flex items-center gap-2"
+                                            >
+                                                <span className="text-gray-400">→</span>
+                                                {item.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
                 </nav>
 
                     <div className="p-4 mt-8 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
@@ -208,6 +339,7 @@ export default function DevPage() {
                         <>
                             <Section title="🔘 Botões">
                                 <ComponentDemo
+                                    id="button-variants"
                                     title="Button - Variantes de Cores"
                                     description="Botões com diferentes estilos visuais para ações primárias, secundárias, sucesso, perigo e aviso."
                                     code={`<Button buttonType="primary">Primary</Button>
@@ -244,6 +376,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-sizes"
                                     title="Button - Tamanhos"
                                     description="Botões em diferentes tamanhos: pequeno, padrão e largo."
                                     code={`<Button buttonType="primary" size="small">Small</Button>
@@ -260,6 +393,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-shapes"
                                     title="Button - Formas"
                                     description="Botões com diferentes formatos: padrão, pill (arredondado) e square (sem borda arredondada)."
                                     code={`<Button buttonType="primary">Default Rounded</Button>
@@ -274,6 +408,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-states"
                                     title="Button - Estados"
                                     description="Botões em estados desabilitado e com bordas."
                                     code={`<Button buttonType="primary" disabled>Disabled</Button>
@@ -289,6 +424,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-toggle"
                                     title="ButtonToggle"
                                     description="Botão com estado on/off, ideal para configurações e preferências."
                                     code={`const [toggleValue, setToggleValue] = useState(false);
@@ -316,6 +452,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-dropdown"
                                     title="ButtonDropDown"
                                     description="Botão com menu dropdown para múltiplas opções."
                                     code={`<ButtonDropDown 
@@ -342,6 +479,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-group"
                                     title="ButtonGroup"
                                     description="Grupo de botões relacionados visualmente conectados."
                                     code={`<ButtonGroup
@@ -369,6 +507,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-radio"
                                     title="ButtonRadioGroup"
                                     description="Grupo de botões com comportamento de radio buttons."
                                     code={`<ButtonRadioGroup
@@ -397,6 +536,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-float"
                                     title="FloatActionButton (FAB)"
                                     description="Botão flutuante para ação principal, geralmente fixo no canto da tela."
                                     code={`<FloatActionButton 
@@ -414,6 +554,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-float"
                                     title="FloatActionButtonExpandable"
                                     description="Botão flutuante que expande para mostrar múltiplas ações."
                                     code={`<FloatActionButtonExpandable
@@ -437,6 +578,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-pills"
                                     title="PillsBadge"
                                     description="Badges em formato de pílula para tags e status."
                                     code={`<PillsBadge type="primary">Primary</PillsBadge>
@@ -465,6 +607,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="button-whatsapp"
                                     title="WhatsappButton"
                                     description="Botão estilizado para abrir conversa no WhatsApp."
                                     code={`<WhatsappButton 
@@ -491,6 +634,7 @@ export default function DevPage() {
                         <>
                             <Section title="📝 Inputs">
                                 <ComponentDemo
+                                    id="input-text"
                                     title="InputText"
                                     description="Input de texto básico com validação e estados."
                                     code={`<InputText
@@ -515,6 +659,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-email"
                                     title="InputEmail"
                                     description="Input específico para endereço de e-mail com validação."
                                     code={`<InputEmail
@@ -536,6 +681,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-password"
                                     title="InputPassword"
                                     description="Input de senha com botão para mostrar/ocultar."
                                     code={`<InputPassword
@@ -557,6 +703,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-number"
                                     title="InputNumber"
                                     description="Input numérico com incremento/decremento."
                                     code={`<InputNumber
@@ -580,6 +727,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-cpf"
                                     title="InputCPF"
                                     description="Input formatado para CPF com máscara."
                                     code={`<InputCPF
@@ -601,6 +749,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-pis"
                                     title="InputPIS"
                                     description="Input formatado para número PIS."
                                     code={`<InputPIS
@@ -619,6 +768,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-nit"
                                     title="InputNIT"
                                     description="Input formatado para número NIT."
                                     code={`<InputNIT
@@ -637,6 +787,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-date"
                                     title="InputDate"
                                     description="Input de data nativo."
                                     code={`<InputDate
@@ -656,6 +807,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-datepicker"
                                     title="DatePicker"
                                     description="Seletor de data customizado com calendário."
                                     code={`<DatePicker
@@ -674,6 +826,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-month"
                                     title="InputMonth"
                                     description="Input para seleção de mês e ano."
                                     code={`<InputMonth
@@ -692,6 +845,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-textarea"
                                     title="InputTextArea"
                                     description="Área de texto para conteúdo maior."
                                     code={`<InputTextArea
@@ -713,6 +867,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-checkbox"
                                     title="Checkbox"
                                     description="Caixa de seleção para opções múltiplas."
                                     code={`<Checkbox
@@ -742,6 +897,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-radio"
                                     title="Radio"
                                     description="Botão de rádio para seleção única."
                                     code={`<Radio
@@ -778,6 +934,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="input-file"
                                     title="InputFile"
                                     description="Input para upload de arquivos."
                                     code={`<InputFile
@@ -803,6 +960,7 @@ export default function DevPage() {
                         <>
                             <Section title="🎴 Cards">
                                 <ComponentDemo
+                                    id="card-basic"
                                     title="Card Básico"
                                     description="Card genérico com título e ações."
                                     code={`<Card>
@@ -827,6 +985,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="card-colors"
                                     title="Card com Variantes de Cor"
                                     description="Cards com diferentes cores para destacar informações."
                                     code={`<Card>
@@ -860,39 +1019,7 @@ export default function DevPage() {
                                 </ComponentDemo>
 
                                 <ComponentDemo
-                                    title="Card com Variantes de Cor"
-                                    description="Cards com diferentes cores para destacar informações."
-                                    code={`<Card>
-  <CardTitle color="primary">Primary Card</CardTitle>
-  ...
-</Card>
-
-<Card>
-  <CardTitle color="success">Success Card</CardTitle>
-  ...
-</Card>`}
-                                >
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <Card>
-                                            <CardTitle color="primary">Informação</CardTitle>
-                                            <p className="text-gray-600 text-sm my-2 px-2">Card com título azul</p>
-                                        </Card>
-                                        <Card>
-                                            <CardTitle color="success">Sucesso</CardTitle>
-                                            <p className="text-gray-600 text-sm my-2 px-2">Card com título verde</p>
-                                        </Card>
-                                        <Card>
-                                            <CardTitle color="warning">Atenção</CardTitle>
-                                            <p className="text-gray-600 text-sm my-2 px-2">Card com título laranja</p>
-                                        </Card>
-                                        <Card>
-                                            <CardTitle color="danger">Erro</CardTitle>
-                                            <p className="text-gray-600 text-sm my-2 px-2">Card com título vermelho</p>
-                                        </Card>
-                                    </div>
-                                </ComponentDemo>
-
-                                <ComponentDemo
+                                    id="card-image"
                                     title="Card com Imagem"
                                     description="Card com imagem, título e conteúdo."
                                     code={`<Card>
@@ -1011,6 +1138,7 @@ export default function DevPage() {
                             <Section title="📐 Layouts">
                                 {/* Typography */}
                                 <ComponentDemo
+                                    id="layout-typography"
                                     title="Typography - Componentes de Texto"
                                     description="Componentes para hierarquia de texto: Title, Subtitle, Label, Caption e FieldLabel"
                                     code={`import { Title, Subtitle, Label, Caption, FieldLabel } from '@/components/Layouts/Typography';
@@ -1047,6 +1175,7 @@ export default function DevPage() {
 
                                 {/* Accordion */}
                                 <ComponentDemo
+                                    id="layout-accordion"
                                     title="Accordion - Expansível Básico"
                                     description="Accordion com múltiplos itens expansíveis simultaneamente"
                                     code={`import Accordion from '@/components/Layouts/Accordion';
@@ -1067,6 +1196,7 @@ const items = [
 
                                 {/* Loading */}
                                 <ComponentDemo
+                                    id="layout-loading"
                                     title="Loading - Tela de Carregamento"
                                     description="Tela de loading com logo animado em 3D"
                                     code={`import Loading from '@/components/Layouts/Loading';
@@ -1088,6 +1218,7 @@ const items = [
 
                                 {/* NoDataFound */}
                                 <ComponentDemo
+                                    id="layout-nodata"
                                     title="NoDataFound - Sem Dados"
                                     description="Mensagem quando não há dados para exibir"
                                     code={`import NoDataFound from '@/components/Layouts/NoDataFound';
@@ -1103,6 +1234,7 @@ const items = [
 
                                 {/* Pagination */}
                                 <ComponentDemo
+                                    id="layout-pagination"
                                     title="Pagination - Paginação"
                                     description="Paginação com controle de itens por página"
                                     code={`import { Pagination } from '@/components/Layouts/Pagination';
@@ -1133,6 +1265,7 @@ const data = Array.from({ length: 100 }, (_, i) => ({
 
                                 {/* Skeleton */}
                                 <ComponentDemo
+                                    id="layout-skeleton"
                                     title="Skeleton - Loader Básico"
                                     description="Skeleton loader animado genérico"
                                     code={`import Skeleton from '@/components/Layouts/Skeleton';
@@ -1149,6 +1282,7 @@ const data = Array.from({ length: 100 }, (_, i) => ({
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="layout-skeleton-form"
                                     title="FormSkeleton - Loader de Formulário"
                                     description="Skeleton especializado para formulários"
                                     code={`import { FormSkeleton } from '@/components/Layouts/Skeleton';
@@ -1161,6 +1295,7 @@ const data = Array.from({ length: 100 }, (_, i) => ({
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="layout-skeleton-table"
                                     title="SkeletonList - Loader de Tabela"
                                     description="Skeleton para tabelas de dados"
                                     code={`import { SkeletonList } from '@/components/Layouts/Skeleton';
@@ -1171,6 +1306,7 @@ const data = Array.from({ length: 100 }, (_, i) => ({
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="layout-skeleton-card"
                                     title="SkeletonList - Loader de Cards"
                                     description="Skeleton para cards em grid"
                                     code={`import { SkeletonList } from '@/components/Layouts/Skeleton';
@@ -1181,6 +1317,7 @@ const data = Array.from({ length: 100 }, (_, i) => ({
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="layout-skeleton-list"
                                     title="SkeletonList - Loader de Lista"
                                     description="Skeleton para listas de itens"
                                     code={`import { SkeletonList } from '@/components/Layouts/Skeleton';
@@ -1192,6 +1329,7 @@ const data = Array.from({ length: 100 }, (_, i) => ({
 
                                 {/* Tooltip */}
                                 <ComponentDemo
+                                    id="layout-tooltip"
                                     title="TooltipComponent - Dicas"
                                     description="Tooltip com múltiplas posições: top, bottom, left, right"
                                     code={`import { TooltipComponent } from '@/components/Layouts/TooltipComponent';
@@ -1218,6 +1356,7 @@ const data = Array.from({ length: 100 }, (_, i) => ({
 
                                 {/* ModalGrid */}
                                 <ComponentDemo
+                                    id="layout-modal"
                                     title="ModalGrid - Modal Básico"
                                     description="Modal responsivo com tamanhos configuráveis (sm, md, lg, full)"
                                     code={`import ModalGrid from '@/components/Layouts/ModalGrid';
@@ -1268,6 +1407,7 @@ const [showModal, setShowModal] = useState(false);
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="layout-modal-variants"
                                     title="ModalGrid - Variantes de Cor"
                                     description="Modal com variantes danger (vermelho) e warning (laranja)"
                                     code={`// Modal de Perigo (danger)
@@ -1337,6 +1477,7 @@ const [showModal, setShowModal] = useState(false);
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="layout-modal-sizes"
                                     title="ModalGrid - Tamanhos"
                                     description="Diferentes tamanhos: sm (pequeno), md (médio), lg (grande), full (tela cheia)"
                                     code={`// Tamanhos disponíveis
@@ -1356,6 +1497,7 @@ const [showModal, setShowModal] = useState(false);
                                 </ComponentDemo>
 
                                 <ComponentDemo
+                                    id="layout-modal-props"
                                     title="ModalGrid - Propriedades"
                                     description="Props disponíveis para personalização"
                                     code={`<ModalGrid
@@ -1389,6 +1531,7 @@ const [showModal, setShowModal] = useState(false);
 
                                 {/* Balloon */}
                                 <ComponentDemo
+                                    id="layout-balloon"
                                     title="Balloon - Balão de Notificação"
                                     description="Balão animado com seta para destacar elementos (top, bottom, left, right)"
                                     code={`import Balloon from '@/components/Layouts/Balloon';
@@ -1442,6 +1585,7 @@ const [show, setShow] = useState(true);
 
                                 {/* Blockquote */}
                                 <ComponentDemo
+                                    id="layout-blockquote"
                                     title="Blockquote - Citação Destacada"
                                     description="Bloco de citação com cores e tamanhos (danger, success, warning, primary, default)"
                                     code={`import Blockquote from '@/components/Layouts/Blockquote';
@@ -1478,6 +1622,7 @@ const [show, setShow] = useState(true);
 
                                 {/* Clipboard */}
                                 <ComponentDemo
+                                    id="layout-clipboard"
                                     title="Clipboard - Copiar Texto"
                                     description="Componente para copiar texto para área de transferência"
                                     code={`import Clipboard from '@/components/Layouts/Clipboard';
@@ -1512,6 +1657,7 @@ const [show, setShow] = useState(true);
 
                                 {/* Confirm */}
                                 <ComponentDemo
+                                    id="layout-confirm"
                                     title="Confirm - Confirmação Simples"
                                     description="Modal de confirmação com ícone de alerta"
                                     code={`import Confirm from '@/components/Layouts/Confirm';
@@ -1549,6 +1695,7 @@ const [show, setShow] = useState(false);
 
                                 {/* Dialog */}
                                 <ComponentDemo
+                                    id="layout-dialog"
                                     title="Dialog - Diálogo com Textarea"
                                     description="Modal com textarea para entrada de texto (útil para justificativas)"
                                     code={`import Dialog from '@/components/Layouts/Dialog';
@@ -1587,6 +1734,7 @@ const [show, setShow] = useState(false);
 
                                 {/* DialogFields */}
                                 <ComponentDemo
+                                    id="layout-dialogfields"
                                     title="DialogFields - Diálogo com Campos"
                                     description="Modal para formulários rápidos com campos customizados"
                                     code={`import DialogFields from '@/components/Layouts/DialogFields';
@@ -1628,6 +1776,7 @@ const [show, setShow] = useState(false);
 
                                 {/* DataLoading */}
                                 <ComponentDemo
+                                    id="layout-dataloading"
                                     title="DataLoading - Carregando com Pontos"
                                     description="Indicador de loading com texto e pontos animados"
                                     code={`import DataLoading from '@/components/Layouts/DataLoading';
@@ -1643,6 +1792,7 @@ const [show, setShow] = useState(false);
 
                                 {/* Failure */}
                                 <ComponentDemo
+                                    id="layout-failure"
                                     title="Failure - Tela de Erro"
                                     description="Tela de falha com ícone e mensagem customizável"
                                     code={`import Failure from '@/components/Layouts/Failure';
@@ -1662,6 +1812,7 @@ const [show, setShow] = useState(false);
 
                                 {/* Iframe */}
                                 <ComponentDemo
+                                    id="layout-iframe"
                                     title="Iframe - Frame Incorporado"
                                     description="Componente para incorporar páginas com loading e callback"
                                     code={`import Iframe from '@/components/Layouts/Iframe';
@@ -1691,6 +1842,7 @@ const [show, setShow] = useState(false);
 
                                 {/* MiniSidebar */}
                                 <ComponentDemo
+                                    id="layout-minisidebar"
                                     title="MiniSidebar - Barra Lateral Compacta"
                                     description="Sidebar responsiva com ícones e labels (vertical ou horizontal)"
                                     code={`import MiniSidebar from '@/components/Layouts/MiniSidebar';
