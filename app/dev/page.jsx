@@ -34,6 +34,7 @@ import { Pagination } from '@/components/Layouts/Pagination';
 import { Skeleton, FormSkeleton, SkeletonList } from '@/components/Layouts/Skeleton';
 import { TooltipComponent } from '@/components/Layouts/TooltipComponent';
 import { Title, Subtitle, Label, Caption, FieldLabel } from '@/components/Layouts/Typography';
+import ModalGrid from '@/components/Layouts/ModalGrid';
 
 const CodeBlock = ({ code }) => {
     const [copied, setCopied] = useState(false);
@@ -114,6 +115,9 @@ export default function DevPage() {
     const [selectedGroup, setSelectedGroup] = useState('option1');
     const [loading, setLoading] = useState(false);
     const [paginationData] = useState(Array.from({ length: 100 }, (_, i) => ({ id: i + 1, name: `Item ${i + 1}` })));
+    const [showModal, setShowModal] = useState(false);
+    const [showModalDanger, setShowModalDanger] = useState(false);
+    const [showModalWarning, setShowModalWarning] = useState(false);
 
     const menuItems = [
         { id: 'buttons', label: 'Botões', icon: '🔘' },
@@ -1192,6 +1196,177 @@ const data = Array.from({ length: 100 }, (_, i) => ({
                                         <TooltipComponent content="Tooltip à direita" side="right">
                                             <Button size="sm">Right</Button>
                                         </TooltipComponent>
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* ModalGrid */}
+                                <ComponentDemo
+                                    title="ModalGrid - Modal Básico"
+                                    description="Modal responsivo com tamanhos configuráveis (sm, md, lg, full)"
+                                    code={`import ModalGrid from '@/components/Layouts/ModalGrid';
+
+const [showModal, setShowModal] = useState(false);
+
+<Button onClick={() => setShowModal(true)}>Abrir Modal</Button>
+
+<ModalGrid
+  modalControl={showModal}
+  setModalControl={setShowModal}
+  title="Título do Modal"
+  size="md"
+  btnCancel="Cancelar"
+  btnSubmit="Salvar"
+  submitCallBack={() => console.log('Salvo!')}
+>
+  <p>Conteúdo do modal aqui...</p>
+</ModalGrid>`}
+                                >
+                                    <div className="space-y-4">
+                                        <Button onClick={() => setShowModal(true)}>Abrir Modal Padrão</Button>
+                                        
+                                        <ModalGrid
+                                            modalControl={showModal}
+                                            setModalControl={setShowModal}
+                                            title="Modal de Exemplo"
+                                            size="md"
+                                            btnCancel="Cancelar"
+                                            btnSubmit="Salvar"
+                                            submitCallBack={() => alert('Formulário salvo!')}
+                                        >
+                                            <div className="py-4 space-y-4">
+                                                <p className="text-gray-700 dark:text-gray-300">
+                                                    Este é um exemplo de conteúdo dentro do modal.
+                                                </p>
+                                                <InputText
+                                                    label="Nome"
+                                                    placeholder="Digite seu nome"
+                                                />
+                                                <InputEmail
+                                                    label="E-mail"
+                                                    placeholder="seu@email.com"
+                                                />
+                                            </div>
+                                        </ModalGrid>
+                                    </div>
+                                </ComponentDemo>
+
+                                <ComponentDemo
+                                    title="ModalGrid - Variantes de Cor"
+                                    description="Modal com variantes danger (vermelho) e warning (laranja)"
+                                    code={`// Modal de Perigo (danger)
+<ModalGrid
+  modalControl={showModal}
+  setModalControl={setShowModal}
+  title="Atenção!"
+  danger
+  btnCancel="Não"
+  btnSubmit="Sim, excluir"
+>
+  <p>Tem certeza que deseja excluir?</p>
+</ModalGrid>
+
+// Modal de Aviso (warning)
+<ModalGrid
+  modalControl={showModal}
+  setModalControl={setShowModal}
+  title="Aviso"
+  warning
+  btnSubmit="Entendi"
+>
+  <p>Esta ação não pode ser desfeita.</p>
+</ModalGrid>`}
+                                >
+                                    <div className="flex gap-4">
+                                        <Button buttonType="danger" onClick={() => setShowModalDanger(true)}>
+                                            Modal Danger
+                                        </Button>
+                                        <Button buttonType="warning" onClick={() => setShowModalWarning(true)}>
+                                            Modal Warning
+                                        </Button>
+
+                                        <ModalGrid
+                                            modalControl={showModalDanger}
+                                            setModalControl={setShowModalDanger}
+                                            title="Confirmar Exclusão"
+                                            danger
+                                            size="sm"
+                                            btnCancel="Não"
+                                            btnSubmit="Sim, excluir"
+                                            submitCallBack={() => alert('Item excluído!')}
+                                        >
+                                            <div className="py-4">
+                                                <p className="text-gray-700 dark:text-gray-300">
+                                                    Tem certeza que deseja excluir este item? Esta ação não pode ser desfeita.
+                                                </p>
+                                            </div>
+                                        </ModalGrid>
+
+                                        <ModalGrid
+                                            modalControl={showModalWarning}
+                                            setModalControl={setShowModalWarning}
+                                            title="Aviso Importante"
+                                            warning
+                                            size="sm"
+                                            btnSubmit="Entendi"
+                                            submitCallBack={() => setShowModalWarning(false)}
+                                        >
+                                            <div className="py-4">
+                                                <p className="text-gray-700 dark:text-gray-300">
+                                                    As alterações realizadas podem afetar outros usuários do sistema.
+                                                </p>
+                                            </div>
+                                        </ModalGrid>
+                                    </div>
+                                </ComponentDemo>
+
+                                <ComponentDemo
+                                    title="ModalGrid - Tamanhos"
+                                    description="Diferentes tamanhos: sm (pequeno), md (médio), lg (grande), full (tela cheia)"
+                                    code={`// Tamanhos disponíveis
+<ModalGrid size="sm" /> // Pequeno
+<ModalGrid size="md" /> // Médio (padrão)
+<ModalGrid size="lg" /> // Grande
+<ModalGrid size="full" /> // Tela cheia`}
+                                >
+                                    <div className="space-y-2">
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                            <strong>sm:</strong> 40-50% da tela em desktop<br/>
+                                            <strong>md:</strong> 65-75% da tela em desktop<br/>
+                                            <strong>lg:</strong> 80-85% da tela em desktop<br/>
+                                            <strong>full:</strong> 100% da tela (tela cheia)
+                                        </p>
+                                    </div>
+                                </ComponentDemo>
+
+                                <ComponentDemo
+                                    title="ModalGrid - Propriedades"
+                                    description="Props disponíveis para personalização"
+                                    code={`<ModalGrid
+  modalControl={boolean}           // Controla visibilidade
+  setModalControl={function}       // Função para alterar visibilidade
+  title={string}                   // Título do modal
+  size="sm|md|lg|full"            // Tamanho (default: md)
+  danger={boolean}                 // Estilo vermelho
+  warning={boolean}                // Estilo laranja
+  dismissible={boolean}            // Fecha com ESC (default: true)
+  scrollable={boolean}             // Conteúdo com scroll (default: true)
+  scrollableX={boolean}            // Scroll horizontal
+  btnCancel={string}               // Texto botão cancelar
+  btnSubmit={string}               // Texto botão submit
+  submitCallBack={function}        // Função ao clicar em submit
+  closeOnSubmit={boolean}          // Fecha ao submeter
+  closeModalCallback={function}    // Callback ao fechar
+  footer={ReactNode}               // Footer customizado
+  footerClass={string}             // Classes CSS do footer
+  contentClass={string}            // Classes CSS do conteúdo
+  background={string}              // Background customizado
+  height={string}                  // Altura customizada
+  width={string}                   // Largura customizada
+  customMargin={string}            // Margem customizada
+/>`}
+                                >
+                                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p>Veja o código ao lado para todas as propriedades disponíveis.</p>
                                     </div>
                                 </ComponentDemo>
                             </Section>
