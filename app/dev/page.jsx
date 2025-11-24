@@ -16,7 +16,8 @@ import InputTextArea from '@/components/inputs/InputTextArea';
 import InputCPF from '@/components/inputs/InputCPF';
 import InputPIS from '@/components/inputs/InputPIS';
 import InputNIT from '@/components/inputs/InputNIT';
-import { Card, CardTitle, CardActions } from '@/components/cards/Card';
+import Card from '@/components/cards/Card';
+import { CardTitle, CardActions } from '@/components/cards/Card';
 
 export default function DevPage() {
   const [inputValue, setInputValue] = useState('');

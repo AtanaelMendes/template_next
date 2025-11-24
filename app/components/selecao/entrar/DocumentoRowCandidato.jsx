@@ -9,7 +9,7 @@ import {
   faSignature,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { format } from "date-fns";
+import { format } from "@/assets/dateUtils";
 import { memo, useMemo } from "react";
 
 const DocumentoRowCandidato = ({ documento, docInfo, indexProrrogacao }) => {

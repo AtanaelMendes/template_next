@@ -1,39 +1,32 @@
-import * as Tooltip from "@radix-ui/react-tooltip";
-
 export const TooltipComponent = ({
   children,
   content,
   asChild = false,
-  usePortal = true,
+  side = "top",
   ...rest
 }) => {
-  if (usePortal) {
-    return (
-      <Tooltip.Root>
-        <Tooltip.Trigger asChild={asChild}>{children}</Tooltip.Trigger>
-        <Tooltip.Portal>
-          <Tooltip.Content
-            className="select-none rounded-md bg-gray-800 px-3 py-1.5 text-xs leading-tight text-white shadow-lg will-change-[transform,opacity] data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade"
-            {...rest}
-          >
-            {content}
-            <Tooltip.Arrow />
-          </Tooltip.Content>
-        </Tooltip.Portal>
-      </Tooltip.Root>
-    );
-  }
+  const sideClasses = {
+    top: "bottom-full mb-2",
+    bottom: "top-full mt-2",
+    left: "right-full mr-2",
+    right: "left-full ml-2",
+  };
 
   return (
-    <Tooltip.Root>
-      <Tooltip.Trigger asChild={asChild}>{children}</Tooltip.Trigger>
-      <Tooltip.Content
-        className="select-none rounded-md bg-gray-800 px-3 py-1.5 text-xs leading-tight text-white shadow-lg will-change-[transform,opacity] data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade"
+    <div className="relative inline-block group">
+      {children}
+      <div
+        className={`absolute ${sideClasses[side]} left-1/2 -translate-x-1/2 hidden group-hover:block z-50 bg-gray-800 text-white text-xs rounded px-3 py-1.5 whitespace-nowrap shadow-lg`}
         {...rest}
       >
         {content}
-        <Tooltip.Arrow />
-      </Tooltip.Content>
-    </Tooltip.Root>
+        <div className={`absolute w-2 h-2 bg-gray-800 ${
+          side === 'top' ? 'top-full left-1/2 -translate-x-1/2 -translate-y-1' :
+          side === 'bottom' ? 'bottom-full left-1/2 -translate-x-1/2 translate-y-1' :
+          side === 'left' ? 'left-full top-1/2 -translate-y-1/2 translate-x-1' :
+          'right-full top-1/2 -translate-y-1/2 -translate-x-1'
+        }`} />
+      </div>
+    </div>
   );
 };

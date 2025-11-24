@@ -3,7 +3,7 @@ import NoDataFound from "@/components/Layouts/NoDataFound";
 import Title, { Caption, Subtitle } from "@/components/Layouts/Typography";
 import axiosInstance from "@/plugins/axios";
 import { useCallback, useEffect, useState } from "react";
-import { format } from "date-fns";
+import { format } from "@/assets/dateUtils";
 import Button from "@/components/buttons/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePen } from "@fortawesome/free-solid-svg-icons";

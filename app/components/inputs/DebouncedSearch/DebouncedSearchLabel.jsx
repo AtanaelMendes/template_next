@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FieldLabel } from "@/components/Layouts/Typography";
+import { TooltipComponent } from "@/components/Layouts/TooltipComponent";
 import { DebouncedSearchContext } from ".";
 
 /**
@@ -19,9 +20,7 @@ export const DebouncedSearchLabel = ({
   tooltip = false,
 }) => {
   const { id } = useContext(DebouncedSearchContext);
-  const TooltipComponentLazy = React.lazy(
-    () => tooltip && import("@radix-ui/react-tooltip")
-  );
+
   return (
     <label htmlFor={id} className="flex">
       <FieldLabel className={labelClassName} required={labelRequired}>
@@ -30,7 +29,7 @@ export const DebouncedSearchLabel = ({
       {hint && (
         <>
           {tooltip ? (
-            <TooltipComponentLazy content={hint} asChild>
+            <TooltipComponent content={hint}>
               <FontAwesomeIcon
                 icon={hintIcon}
                 width="16"
@@ -40,7 +39,7 @@ export const DebouncedSearchLabel = ({
                 tabIndex={-1}
                 data-tooltip-id={`${id}_hint`}
               />
-            </TooltipComponentLazy>
+            </TooltipComponent>
           ) : (
             <FontAwesomeIcon
               icon={hintIcon}

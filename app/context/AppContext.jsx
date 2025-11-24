@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState, useCallback } from 'react';
+import { createContext, useState, useCallback, useContext } from 'react';
 
 export const AppContext = createContext();
 
@@ -36,4 +36,12 @@ export function AppProvider({ children }) {
       {children}
     </AppContext.Provider>
   );
+}
+
+export function useAppContext() {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error('useAppContext must be used within an AppProvider');
+  }
+  return context;
 }

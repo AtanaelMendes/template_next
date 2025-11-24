@@ -1,5 +1,4 @@
 import { cn } from "@/assets/utils";
-import PropTypes from "prop-types";
 
 const PILL_STYLES = {
     default: " bg-stone-100 text-gray-800 border border-stone-200 shadow-md ",
@@ -11,6 +10,15 @@ const PILL_STYLES = {
     "warning-dark": " bg-yellow-500 text-white ",
 };
 
+/**
+ * Component that renders a pill/badge element
+ * @param {Object} props
+ * @param {string} [props.type='default'] - Style variant: default, primary, primary-dark, danger, success, warning, warning-dark
+ * @param {React.ReactNode} props.children - Content to display
+ * @param {boolean} [props.small=false] - Render smaller version
+ * @param {string} [props.className] - Additional CSS classes
+ * @returns {React.ReactNode}
+ */
 const PillsBadge = ({ type, children, small, className }) => {
     const baseClasses = `font-medium ${small ? "px-1" : "px-2"} rounded-full`;
     const sizeClasses = small ? "text-xs" : "text-sm";
@@ -20,13 +28,6 @@ const PillsBadge = ({ type, children, small, className }) => {
             {children}
         </span>
     );
-};
-
-PillsBadge.propTypes = {
-    type: PropTypes.oneOf(Object.keys(PILL_STYLES)),
-    children: PropTypes.node.isRequired,
-    small: PropTypes.bool,
-    className: PropTypes.string,
 };
 
 export default PillsBadge;

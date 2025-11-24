@@ -31,7 +31,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Rating } from "@smastrom/react-rating";
 import "@smastrom/react-rating/style.css";
-import { addDays, format } from "date-fns";
+import { addDays, format } from "@/assets/dateUtils";
 import { Datepicker } from "flowbite-react";
 import moment from "moment";
 import { useCallback, useEffect, useMemo, useState } from "react";
