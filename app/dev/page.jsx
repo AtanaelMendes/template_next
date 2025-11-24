@@ -27,6 +27,13 @@ import InputPIS from '@/components/inputs/InputPIS';
 import InputNIT from '@/components/inputs/InputNIT';
 import Card from '@/components/cards/Card';
 import { CardTitle, CardActions, CardImage, CardBody } from '@/components/cards/Card';
+import Accordion from '@/components/Layouts/Accordion';
+import Loading from '@/components/Layouts/Loading';
+import NoDataFound from '@/components/Layouts/NoDataFound';
+import { Pagination } from '@/components/Layouts/Pagination';
+import { Skeleton, FormSkeleton, SkeletonList } from '@/components/Layouts/Skeleton';
+import { TooltipComponent } from '@/components/Layouts/TooltipComponent';
+import { Title, Subtitle, Label, Caption, FieldLabel } from '@/components/Layouts/Typography';
 
 const CodeBlock = ({ code }) => {
     const [copied, setCopied] = useState(false);
@@ -105,11 +112,14 @@ export default function DevPage() {
     const [textAreaValue, setTextAreaValue] = useState('');
     const [toggleValue, setToggleValue] = useState(false);
     const [selectedGroup, setSelectedGroup] = useState('option1');
+    const [loading, setLoading] = useState(false);
+    const [paginationData] = useState(Array.from({ length: 100 }, (_, i) => ({ id: i + 1, name: `Item ${i + 1}` })));
 
     const menuItems = [
         { id: 'buttons', label: 'Botões', icon: '🔘' },
         { id: 'inputs', label: 'Inputs', icon: '📝' },
         { id: 'cards', label: 'Cards', icon: '🎴' },
+        { id: 'layouts', label: 'Layouts', icon: '📐' },
     ];
 
     return (
@@ -970,6 +980,220 @@ export default function DevPage() {
                                     </Card>
                                 </ComponentDemo>
 
+                            </Section>
+                        </>
+                    )}
+
+                    {/* Layouts Section */}
+                    {activeSection === 'layouts' && (
+                        <>
+                            <Section title="📐 Layouts">
+                                {/* Typography */}
+                                <ComponentDemo
+                                    title="Typography - Componentes de Texto"
+                                    description="Componentes para hierarquia de texto: Title, Subtitle, Label, Caption e FieldLabel"
+                                    code={`import { Title, Subtitle, Label, Caption, FieldLabel } from '@/components/Layouts/Typography';
+
+<Title>Título Principal</Title>
+<Subtitle>Subtítulo</Subtitle>
+<Label>Label Padrão</Label>
+<Caption>Texto auxiliar</Caption>
+<FieldLabel required>Campo Obrigatório</FieldLabel>`}
+                                >
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Title className="dark:text-gray-100">Título Principal</Title>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Componente: Title</p>
+                                        </div>
+                                        <div>
+                                            <Subtitle className="dark:text-gray-200">Subtítulo do conteúdo</Subtitle>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Componente: Subtitle</p>
+                                        </div>
+                                        <div>
+                                            <Label className="dark:text-gray-300">Label padrão</Label>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Componente: Label</p>
+                                        </div>
+                                        <div>
+                                            <Caption className="dark:text-gray-400">Texto auxiliar em tamanho pequeno</Caption>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Componente: Caption</p>
+                                        </div>
+                                        <div>
+                                            <FieldLabel required className="dark:text-gray-200">Campo Obrigatório</FieldLabel>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Componente: FieldLabel (com asterisco vermelho)</p>
+                                        </div>
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* Accordion */}
+                                <ComponentDemo
+                                    title="Accordion - Expansível Básico"
+                                    description="Accordion com múltiplos itens expansíveis simultaneamente"
+                                    code={`import Accordion from '@/components/Layouts/Accordion';
+
+const items = [
+  { title: 'Item 1', subTitle: 'Sub 1', content: '<p>Conteúdo 1</p>' },
+  { title: 'Item 2', subTitle: 'Sub 2', content: '<p>Conteúdo 2</p>' }
+];
+
+<Accordion items={items} />`}
+                                >
+                                    <Accordion items={[
+                                        { title: 'Item 1', subTitle: 'Subtítulo 1', content: '<p class="text-gray-700 dark:text-gray-300">Conteúdo do primeiro item do accordion</p>' },
+                                        { title: 'Item 2', subTitle: 'Subtítulo 2', content: '<p class="text-gray-700 dark:text-gray-300">Conteúdo do segundo item do accordion</p>' },
+                                        { title: 'Item 3', subTitle: 'Subtítulo 3', content: '<p class="text-gray-700 dark:text-gray-300">Conteúdo do terceiro item do accordion</p>' },
+                                    ]} />
+                                </ComponentDemo>
+
+                                {/* Loading */}
+                                <ComponentDemo
+                                    title="Loading - Tela de Carregamento"
+                                    description="Tela de loading com logo animado em 3D"
+                                    code={`import Loading from '@/components/Layouts/Loading';
+
+<Loading active={true} />`}
+                                >
+                                    <div className="relative h-64 bg-gray-100 dark:bg-gray-900 rounded">
+                                        <Button onClick={() => setLoading(!loading)} className="mb-4">
+                                            {loading ? 'Esconder Loading' : 'Mostrar Loading'}
+                                        </Button>
+                                        <Loading active={loading} />
+                                        {!loading && (
+                                            <div className="absolute inset-0 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                                                Clique no botão para ativar
+                                            </div>
+                                        )}
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* NoDataFound */}
+                                <ComponentDemo
+                                    title="NoDataFound - Sem Dados"
+                                    description="Mensagem quando não há dados para exibir"
+                                    code={`import NoDataFound from '@/components/Layouts/NoDataFound';
+
+<NoDataFound visible={true} isLoading={false} />
+<NoDataFound visible={true} isLoading={true} />`}
+                                >
+                                    <div className="space-y-4">
+                                        <NoDataFound visible={true} isLoading={false} />
+                                        <NoDataFound visible={true} isLoading={true} />
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* Pagination */}
+                                <ComponentDemo
+                                    title="Pagination - Paginação"
+                                    description="Paginação com controle de itens por página"
+                                    code={`import { Pagination } from '@/components/Layouts/Pagination';
+
+const data = Array.from({ length: 100 }, (_, i) => ({ 
+  id: i + 1, 
+  name: \`Item \${i + 1}\` 
+}));
+
+<Pagination 
+  data={data}
+  itemsPerPage={10}
+  showPaginator={true}
+  showItemCountSelector={true}
+  size="md"
+  callBackChangePage={(items) => console.log(items)}
+/>`}
+                                >
+                                    <Pagination
+                                        data={paginationData}
+                                        itemsPerPage={10}
+                                        showPaginator={true}
+                                        showItemCountSelector={true}
+                                        size="md"
+                                        callBackChangePage={(items) => console.log('Página mudou:', items)}
+                                    />
+                                </ComponentDemo>
+
+                                {/* Skeleton */}
+                                <ComponentDemo
+                                    title="Skeleton - Loader Básico"
+                                    description="Skeleton loader animado genérico"
+                                    code={`import Skeleton from '@/components/Layouts/Skeleton';
+
+<Skeleton className="h-8 w-64" />
+<Skeleton className="h-4 w-48" />
+<Skeleton className="h-10 w-full" />`}
+                                >
+                                    <div className="space-y-4">
+                                        <Skeleton className="h-8 w-64" />
+                                        <Skeleton className="h-4 w-48" />
+                                        <Skeleton className="h-10 w-full" />
+                                    </div>
+                                </ComponentDemo>
+
+                                <ComponentDemo
+                                    title="FormSkeleton - Loader de Formulário"
+                                    description="Skeleton especializado para formulários"
+                                    code={`import { FormSkeleton } from '@/components/Layouts/Skeleton';
+
+<FormSkeleton />`}
+                                >
+                                    <div className="h-96 overflow-hidden rounded border border-gray-200 dark:border-gray-700">
+                                        <FormSkeleton />
+                                    </div>
+                                </ComponentDemo>
+
+                                <ComponentDemo
+                                    title="SkeletonList - Loader de Tabela"
+                                    description="Skeleton para tabelas de dados"
+                                    code={`import { SkeletonList } from '@/components/Layouts/Skeleton';
+
+<SkeletonList count={5} variant="table" />`}
+                                >
+                                    <SkeletonList count={5} variant="table" />
+                                </ComponentDemo>
+
+                                <ComponentDemo
+                                    title="SkeletonList - Loader de Cards"
+                                    description="Skeleton para cards em grid"
+                                    code={`import { SkeletonList } from '@/components/Layouts/Skeleton';
+
+<SkeletonList count={3} variant="cards" />`}
+                                >
+                                    <SkeletonList count={3} variant="cards" />
+                                </ComponentDemo>
+
+                                <ComponentDemo
+                                    title="SkeletonList - Loader de Lista"
+                                    description="Skeleton para listas de itens"
+                                    code={`import { SkeletonList } from '@/components/Layouts/Skeleton';
+
+<SkeletonList count={5} variant="default" />`}
+                                >
+                                    <SkeletonList count={5} variant="default" />
+                                </ComponentDemo>
+
+                                {/* Tooltip */}
+                                <ComponentDemo
+                                    title="TooltipComponent - Dicas"
+                                    description="Tooltip com múltiplas posições: top, bottom, left, right"
+                                    code={`import { TooltipComponent } from '@/components/Layouts/TooltipComponent';
+
+<TooltipComponent content="Texto do tooltip" side="top">
+  <button>Hover aqui</button>
+</TooltipComponent>`}
+                                >
+                                    <div className="flex gap-4 justify-center items-center flex-wrap">
+                                        <TooltipComponent content="Tooltip no topo" side="top">
+                                            <Button size="sm">Top</Button>
+                                        </TooltipComponent>
+                                        <TooltipComponent content="Tooltip embaixo" side="bottom">
+                                            <Button size="sm">Bottom</Button>
+                                        </TooltipComponent>
+                                        <TooltipComponent content="Tooltip à esquerda" side="left">
+                                            <Button size="sm">Left</Button>
+                                        </TooltipComponent>
+                                        <TooltipComponent content="Tooltip à direita" side="right">
+                                            <Button size="sm">Right</Button>
+                                        </TooltipComponent>
+                                    </div>
+                                </ComponentDemo>
                             </Section>
                         </>
                     )}
