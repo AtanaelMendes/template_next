@@ -35,6 +35,17 @@ import { Skeleton, FormSkeleton, SkeletonList } from '@/components/Layouts/Skele
 import { TooltipComponent } from '@/components/Layouts/TooltipComponent';
 import { Title, Subtitle, Label, Caption, FieldLabel } from '@/components/Layouts/Typography';
 import ModalGrid from '@/components/Layouts/ModalGrid';
+import Balloon from '@/components/Layouts/Balloon';
+import Blockquote from '@/components/Layouts/Blockquote';
+import Clipboard from '@/components/Layouts/Clipboard';
+import Confirm from '@/components/Layouts/Confirm';
+import Dialog from '@/components/Layouts/Dialog';
+import DialogFields from '@/components/Layouts/DialogFields';
+import DataLoading from '@/components/Layouts/DataLoading';
+import Failure from '@/components/Layouts/Failure';
+import Iframe from '@/components/Layouts/Iframe';
+import MiniSidebar from '@/components/Layouts/MiniSidebar';
+import { faHome, faUser, faCog, faChartBar } from '@fortawesome/free-solid-svg-icons';
 
 const CodeBlock = ({ code }) => {
     const [copied, setCopied] = useState(false);
@@ -118,6 +129,12 @@ export default function DevPage() {
     const [showModal, setShowModal] = useState(false);
     const [showModalDanger, setShowModalDanger] = useState(false);
     const [showModalWarning, setShowModalWarning] = useState(false);
+    const [showBalloon, setShowBalloon] = useState(true);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [showDialog, setShowDialog] = useState(false);
+    const [showDialogFields, setShowDialogFields] = useState(false);
+    const [showFailure, setShowFailure] = useState(false);
+    const [sidebarActive, setSidebarActive] = useState('home');
 
     const menuItems = [
         { id: 'buttons', label: 'Botões', icon: '🔘' },
@@ -1367,6 +1384,365 @@ const [showModal, setShowModal] = useState(false);
                                 >
                                     <div className="text-sm text-gray-600 dark:text-gray-400">
                                         <p>Veja o código ao lado para todas as propriedades disponíveis.</p>
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* Balloon */}
+                                <ComponentDemo
+                                    title="Balloon - Balão de Notificação"
+                                    description="Balão animado com seta para destacar elementos (top, bottom, left, right)"
+                                    code={`import Balloon from '@/components/Layouts/Balloon';
+
+const [show, setShow] = useState(true);
+
+<div className="relative">
+  <Button>Elemento</Button>
+  <Balloon 
+    visible={show} 
+    placement="top" 
+    color="primary"
+  >
+    Nova notificação!
+  </Balloon>
+</div>
+
+// Cores: primary, warning, danger, success, dark, default
+// Posições: top, bottom, left, right`}
+                                >
+                                    <div className="flex gap-4 justify-center items-center flex-wrap">
+                                        <div className="relative">
+                                            <Button size="sm">Primary Top</Button>
+                                            <Balloon visible={showBalloon} placement="top" color="primary">
+                                                Novo!
+                                            </Balloon>
+                                        </div>
+                                        <div className="relative">
+                                            <Button size="sm">Warning Bottom</Button>
+                                            <Balloon visible={showBalloon} placement="bottom" color="warning">
+                                                Atenção!
+                                            </Balloon>
+                                        </div>
+                                        <div className="relative">
+                                            <Button size="sm">Danger Right</Button>
+                                            <Balloon visible={showBalloon} placement="right" color="danger">
+                                                Erro!
+                                            </Balloon>
+                                        </div>
+                                        <div className="relative">
+                                            <Button size="sm">Success Left</Button>
+                                            <Balloon visible={showBalloon} placement="left" color="success">
+                                                OK!
+                                            </Balloon>
+                                        </div>
+                                        <Button size="sm" onClick={() => setShowBalloon(!showBalloon)}>
+                                            {showBalloon ? 'Esconder' : 'Mostrar'} Balões
+                                        </Button>
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* Blockquote */}
+                                <ComponentDemo
+                                    title="Blockquote - Citação Destacada"
+                                    description="Bloco de citação com cores e tamanhos (danger, success, warning, primary, default)"
+                                    code={`import Blockquote from '@/components/Layouts/Blockquote';
+
+<Blockquote type="primary" size="md">
+  Informação importante aqui
+</Blockquote>
+
+<Blockquote type="danger" size="sm">
+  Mensagem de erro
+</Blockquote>
+
+// Tipos: danger, success, warning, primary, default
+// Tamanhos: xs, sm, md, lg`}
+                                >
+                                    <div className="space-y-4">
+                                        <Blockquote type="primary" size="sm">
+                                            💡 Esta é uma informação importante do sistema.
+                                        </Blockquote>
+                                        <Blockquote type="success" size="sm">
+                                            ✓ Operação realizada com sucesso!
+                                        </Blockquote>
+                                        <Blockquote type="warning" size="sm">
+                                            ⚠️ Atenção: verifique os dados antes de continuar.
+                                        </Blockquote>
+                                        <Blockquote type="danger" size="sm">
+                                            ✕ Erro ao processar a solicitação.
+                                        </Blockquote>
+                                        <Blockquote type="default" size="md">
+                                            Citação padrão com texto maior para destaque de conteúdo importante.
+                                        </Blockquote>
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* Clipboard */}
+                                <ComponentDemo
+                                    title="Clipboard - Copiar Texto"
+                                    description="Componente para copiar texto para área de transferência"
+                                    code={`import Clipboard from '@/components/Layouts/Clipboard';
+
+<Clipboard textToStore="Texto a ser copiado">
+  Clique no ícone para copiar
+</Clipboard>
+
+// Com texto diferente do exibido
+<Clipboard textToStore="texto-secreto-123">
+  Código: XXXX-XXXX
+</Clipboard>`}
+                                >
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <Clipboard>
+                                                usuario@email.com
+                                            </Clipboard>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <Clipboard textToStore="ABC123XYZ789">
+                                                Código: ABC123XYZ789
+                                            </Clipboard>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <Clipboard textToStore="https://exemplo.com/api/v1/endpoint" className="text-primary">
+                                                https://exemplo.com/api/v1/endpoint
+                                            </Clipboard>
+                                        </div>
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* Confirm */}
+                                <ComponentDemo
+                                    title="Confirm - Confirmação Simples"
+                                    description="Modal de confirmação com ícone de alerta"
+                                    code={`import Confirm from '@/components/Layouts/Confirm';
+
+const [show, setShow] = useState(false);
+
+<Button onClick={() => setShow(true)}>Excluir</Button>
+
+<Confirm
+  visible={show}
+  setVisible={setShow}
+  primaryText="Confirmar exclusão?"
+  secondaryText="Esta ação não pode ser desfeita"
+  btnAccept="Sim, excluir"
+  btnDecline="Cancelar"
+  confirmActionCallback={() => console.log('Confirmado!')}
+  cancelActionCallback={() => console.log('Cancelado')}
+/>`}
+                                >
+                                    <div>
+                                        <Button buttonType="danger" onClick={() => setShowConfirm(true)}>
+                                            Abrir Confirm
+                                        </Button>
+                                        <Confirm
+                                            visible={showConfirm}
+                                            setVisible={setShowConfirm}
+                                            primaryText="Deseja realmente continuar?"
+                                            secondaryText="Esta ação pode afetar outros registros"
+                                            btnAccept="Sim, continuar"
+                                            btnDecline="Não, cancelar"
+                                            confirmActionCallback={() => alert('Ação confirmada!')}
+                                        />
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* Dialog */}
+                                <ComponentDemo
+                                    title="Dialog - Diálogo com Textarea"
+                                    description="Modal com textarea para entrada de texto (útil para justificativas)"
+                                    code={`import Dialog from '@/components/Layouts/Dialog';
+
+const [show, setShow] = useState(false);
+
+<Dialog
+  showDialog={show}
+  setDialogControl={setShow}
+  title="Motivo da Rejeição"
+  textAreaLabel="Descreva o motivo"
+  textAreaMinLength={10}
+  maxLength={200}
+  btnCancel="Cancelar"
+  btnAccept="Enviar"
+  confirmActionCallback={(text) => console.log(text)}
+/>`}
+                                >
+                                    <div>
+                                        <Button onClick={() => setShowDialog(true)}>
+                                            Abrir Dialog
+                                        </Button>
+                                        <Dialog
+                                            showDialog={showDialog}
+                                            setDialogControl={setShowDialog}
+                                            title="Justificativa"
+                                            textAreaLabel="Motivo"
+                                            textAreaMinLength={10}
+                                            maxLength={200}
+                                            btnCancel="Cancelar"
+                                            btnAccept="Enviar"
+                                            confirmActionCallback={(text) => alert(`Texto: ${text}`)}
+                                        />
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* DialogFields */}
+                                <ComponentDemo
+                                    title="DialogFields - Diálogo com Campos"
+                                    description="Modal para formulários rápidos com campos customizados"
+                                    code={`import DialogFields from '@/components/Layouts/DialogFields';
+
+const [show, setShow] = useState(false);
+
+<DialogFields
+  visible={show}
+  title="Editar Dados"
+  type="primary"
+  labelConfirm="Salvar"
+  onCancel={() => setShow(false)}
+  onSave={() => console.log('Salvando...')}
+>
+  <InputText label="Nome" />
+  <InputEmail label="E-mail" />
+</DialogFields>`}
+                                >
+                                    <div>
+                                        <Button onClick={() => setShowDialogFields(true)}>
+                                            Abrir DialogFields
+                                        </Button>
+                                        <DialogFields
+                                            visible={showDialogFields}
+                                            title="Cadastro Rápido"
+                                            type="success"
+                                            labelConfirm="Cadastrar"
+                                            onCancel={() => setShowDialogFields(false)}
+                                            onSave={() => {
+                                                alert('Cadastrado!');
+                                                setShowDialogFields(false);
+                                            }}
+                                        >
+                                            <InputText label="Nome Completo" placeholder="Digite seu nome" />
+                                            <InputEmail label="E-mail" placeholder="seu@email.com" />
+                                        </DialogFields>
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* DataLoading */}
+                                <ComponentDemo
+                                    title="DataLoading - Carregando com Pontos"
+                                    description="Indicador de loading com texto e pontos animados"
+                                    code={`import DataLoading from '@/components/Layouts/DataLoading';
+
+<DataLoading />
+<DataLoading className="text-primary" />`}
+                                >
+                                    <div className="space-y-4">
+                                        <DataLoading />
+                                        <DataLoading className="text-primary" />
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* Failure */}
+                                <ComponentDemo
+                                    title="Failure - Tela de Erro"
+                                    description="Tela de falha com ícone e mensagem customizável"
+                                    code={`import Failure from '@/components/Layouts/Failure';
+
+<Failure 
+  active={true} 
+  message="Erro ao carregar dados"
+/>`}
+                                >
+                                    <div className="relative h-64 bg-gray-100 dark:bg-gray-900 rounded">
+                                        <Button onClick={() => setShowFailure(!showFailure)} className="mb-4">
+                                            {showFailure ? 'Esconder' : 'Mostrar'} Failure
+                                        </Button>
+                                        <Failure active={showFailure} message="Não foi possível carregar os dados. Tente novamente." />
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* Iframe */}
+                                <ComponentDemo
+                                    title="Iframe - Frame Incorporado"
+                                    description="Componente para incorporar páginas com loading e callback"
+                                    code={`import Iframe from '@/components/Layouts/Iframe';
+
+<Iframe
+  id="my-iframe"
+  src="pagina.html"
+  title="Página Externa"
+  visible={true}
+  active={true}
+  params={{ token: 'abc123' }}
+  callback={(type, payload) => {
+    console.log('Mensagem do iframe:', type, payload);
+  }}
+/>`}
+                                >
+                                    <div className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                                        <p><strong>Props:</strong></p>
+                                        <ul className="list-disc list-inside space-y-1">
+                                            <li><code>src</code> - URL da página</li>
+                                            <li><code>params</code> - Parâmetros de query string</li>
+                                            <li><code>callback</code> - Função para receber mensagens do iframe</li>
+                                            <li><code>visible/active</code> - Controle de visibilidade</li>
+                                        </ul>
+                                    </div>
+                                </ComponentDemo>
+
+                                {/* MiniSidebar */}
+                                <ComponentDemo
+                                    title="MiniSidebar - Barra Lateral Compacta"
+                                    description="Sidebar responsiva com ícones e labels (vertical ou horizontal)"
+                                    code={`import MiniSidebar from '@/components/Layouts/MiniSidebar';
+import { faHome, faUser, faCog } from '@fortawesome/free-solid-svg-icons';
+
+const [active, setActive] = useState('home');
+
+const items = [
+  { id: 'home', label: 'Início', icon: faHome },
+  { id: 'profile', label: 'Perfil', icon: faUser },
+  { id: 'settings', label: 'Configurações', icon: faCog }
+];
+
+<MiniSidebar
+  items={items}
+  filtroAtivo={active}
+  onItemClick={(id) => setActive(id)}
+  horizontal={false}
+  responsiveLabel={true}
+/>`}
+                                >
+                                    <div className="space-y-4">
+                                        <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded">
+                                            <p className="text-sm mb-2 font-semibold">Vertical:</p>
+                                            <MiniSidebar
+                                                items={[
+                                                    { id: 'home', label: 'Início', icon: faHome },
+                                                    { id: 'profile', label: 'Perfil', icon: faUser },
+                                                    { id: 'settings', label: 'Configurações', icon: faCog },
+                                                    { id: 'stats', label: 'Estatísticas', icon: faChartBar }
+                                                ]}
+                                                filtroAtivo={sidebarActive}
+                                                onItemClick={(id) => setSidebarActive(id)}
+                                                horizontal={false}
+                                                responsiveLabel={false}
+                                            />
+                                        </div>
+                                        <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded">
+                                            <p className="text-sm mb-2 font-semibold">Horizontal:</p>
+                                            <MiniSidebar
+                                                items={[
+                                                    { id: 'home', label: 'Início', icon: faHome },
+                                                    { id: 'profile', label: 'Perfil', icon: faUser },
+                                                    { id: 'settings', label: 'Configurações', icon: faCog },
+                                                    { id: 'stats', label: 'Estatísticas', icon: faChartBar }
+                                                ]}
+                                                filtroAtivo={sidebarActive}
+                                                onItemClick={(id) => setSidebarActive(id)}
+                                                horizontal={true}
+                                                responsiveLabel={false}
+                                            />
+                                        </div>
                                     </div>
                                 </ComponentDemo>
                             </Section>
